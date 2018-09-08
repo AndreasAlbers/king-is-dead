@@ -74,7 +74,7 @@
                 <h1>But old-school programming was so much easier…</h1>
                 <ul>
                     <li>Yeah….</li>
-                    <li>Sure but so is wordpress</li>
+                    <li>Sure but so are one click setup options</li>
                 </ul>
             </section>
             <section class="slide">
@@ -121,6 +121,20 @@
                     <li>Backward compatibility (sometimes broken - find examples for payments and price formatter)</li>
                     <li>SOLID - good architecture requires principles</li>
                     <li>`composer update drupal/commerce --with-dependencies`</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section class="section">
+                <h1>Drupal 7 hook goodness</h1>
+                <ul>
+                    <li>hook_commerce_payment_method_info (+bunch of callbacks)</li>
+                    <li>hook_commerce_payment_transaction_status_info</li>
+                    <li>hook_commerce_checkout_complete</li>
+                    <li>hook_commerce_checkout_page_info</li>
+                    <li>hook_commerce_cart_line_item_refresh/hook_commerce_cart_order_refresh</li>
+                    <li>hook_commerce_cart_product_comparison_properties_alter</li>
                 </ul>
             </section>
         </section>
