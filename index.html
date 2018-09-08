@@ -1,114 +1,157 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>Drupal Europe</title>
+    <title>Drupal Europe</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/white.css">
-		<link rel="stylesheet" href="drupal-europe/css/drupal-europe.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/white.css">
+    <link rel="stylesheet" href="drupal-europe/css/drupal-europe.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<!-- Front slide -->
-				<section class="front">
-					<img data-src="drupal-europe/img/logo-white.png" class="no-frame">
-					<a href="https://www.drupaleurope.org">www.drupaleurope.org</a>
-				</section>
-				<!-- Track sponsor slide -->
-				<!-- Keep one of this slides depends on the track -->
-				<section>
-					<section class="sponsor">
-						<div class="track"><img src="drupal-europe/img/tracks/infrastructure.png">DevOps + Infrastructure</div>
-						Track supported by
-						<img src="drupal-europe/img/sponsors/ddev.png">
-					</section>
-					<section class="sponsor">
-						<div class="track"><img src="drupal-europe/img/tracks/digital_transformation.png">Digital Transformation + Enterprise</div>
-						Track supported by
-						<img src="drupal-europe/img/sponsors/acquia.png">
-					</section>
-					<section class="sponsor">
-						<div class="track"><img src="drupal-europe/img/tracks/infrastructure.png">Drupal + Technology</div>
-						Track supported by
-						<img src="drupal-europe/img/sponsors/platformsh.png">
-					</section>
-					<section class="sponsor">
-						<div class="track"><img src="drupal-europe/img/tracks/government.png">Government</div>
-						Track supported by
-						<img src="drupal-europe/img/sponsors/degov.png">
-					</section>
-				</section>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
 
-				<!-- Session title -->
-				<section class="title">
-					<h1>Main title</h1>
-					<h2>Subtitle</h2>
-					<aside class="public-notes">Track name and URL here & anything else</aside>
-					<aside class="notes">Speaker notes</aside>
-				</section>
-				<!-- Speakers -->
-				<section class="speakers">
-					<div class="speaker">
-						<img src="" class="speaker">
-						<h2>Name</h2>
-						<div class="role">Role</div>
-						<div class="twitter">twitter handler</div>
-					</div>
-					<div class="speaker">
-						<img src="" class="speaker">
-						<h2>Name</h2>
-						<div class="role">Role</div>
-						<div class="twitter">twitter handler</div>
-					</div>
-				</section>
-				<!-- Section -->
-				<section class="section">
-					<h1>Title</h1>
-					<h2>Subtitle</h2>
-				</section>
-				<!-- Quote -->
-				<section class="quote">
-					<blockquote>Lorem ipsum dolor</blockquote>
-					<small class="author">Dries</small>
-				</section>
-				<!-- Regular slide -->
-				<section class="slide">
-					<h1>Title</h1>
-					<h2>SubTitle</h2>
-					Lorem ipsum dolor.
-				</section>
-				<!-- Regular list slide -->
-				<section class="slide">
-					<h1>Title</h1>
-					<h2>SubTitle</h2>
-					<ul>
-						<li>List item 1</li>
-						<li>List item 2</li>
-						<li>List item 3</li>
-						<li>List item 4</li>
-					</ul>
-				</section>
-				<!-- Regular slide -->
-				<section class="slide">
-					<h1>Title</h1>
-					<h2>SubTitle</h2>
-					<pre><code>
+        <section class="front">
+            <img data-src="drupal-europe/img/logo-white.png" class="no-frame">
+            <a href="https://www.drupaleurope.org">www.drupaleurope.org</a>
+        </section>
+
+        <section class="title">
+            <h1>The king is dead, long live the king</h1>
+            <h2>- or how Hooks were superseded by object oriented alternatives in Commerce 2.x.</h2>
+            <aside class="public-notes">Track name and URL here & anything else</aside>
+            <aside class="notes">Speaker notes</aside>
+        </section>
+
+        <section class="speakers">
+            <div class="speaker">
+                <img src="https://files.slack.com/files-pri/T029YQBCN-FCR2RBF1C/jakub.gif" class="speaker">
+                <h2>Jakub Piasecki</h2>
+                <div class="role">Drupal CTO</div>
+                <div class="twitter">@zaporylie</div>
+            </div>
+            <div class="speaker">
+                <img src="https://media3.giphy.com/media/xTiTnwj1LUAw0RAfiU/giphy.gif" class="speaker">
+                <h2>Andreas Albers</h2>
+                <div class="role">Drupal Developer</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h1>Title</h1>
+            <h2>Subtitle</h2>
+        </section>
+
+        <section>
+            <section class="section">
+                <h1>Intro.</h1>
+                <h2></h2>
+            </section>
+            <section class="slide">
+                <h2>OOP is objectively better.</h2>
+                <ul>
+                    <li>Prettier</li>
+                    <li>Easier to maintain - better separation and documentation</li>
+                    <li>Easier to test</li>
+                    <li>IDE helps understand the code</li>
+                </ul>
+            </section>
+            <section class="slide">
+                <h2>But old-school programming was so much easier…</h2>
+                <ul>
+                    <li>Yeah….</li>
+                    <li>Sure but so is wordpress</li>
+                </ul>
+            </section>
+            <section class="slide">
+                <h2>Then why Commerce 2.x is a complete rewrite?</h2>
+                <ul>
+                    <li>All the OOP goodness</li>
+                    <li>Changes to the architecture</li>
+                    <li>Simplification</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section class="section">
+                <h1>Migration from Commerce 1.x to Commerce 2.x</h1>
+                <h2></h2>
+            </section>
+            <section class="slide">
+                <h2>How</h2>
+                <ul>
+                    <li>Migrate not upgrade.</li>
+                    <li>Nodes (product displays) -> products, products -> product variations.</li>
+                    <li>New entity attributes, no more taxonomies?</li>
+                    <li>No UI modules - installing Product provides entity type AND the interface</li>
+                    <li>No Rules (ANARCHY?)</li>
+                    <li>Price components vs adjustments</li>
+                    <li>No more hooks (or at least not that many) - we will cover that more in next section</li>
+                </ul>
+            </section>
+            <section class="slide">
+                <h2>Reasons</h2>
+                <ul>
+                    <li>Drupal 8 duh…</li>
+                    <li>Less contrib code</li>
+                    <li>Less custom code</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section class="slide">
+                <h2>Maintainability</h2>
+                <ul>
+                    <li>Backward compatibility (sometimes broken - find examples for payments and price formatter)</li>
+                    <li>SOLID - good architecture requires principles</li>
+                    <li>`composer update drupal/commerce --with-dependencies`</li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="quote">
+            <blockquote>Lorem ipsum dolor</blockquote>
+            <small class="author">Dries</small>
+        </section>
+
+        <section class="slide">
+            <h1>Title</h1>
+            <h2>SubTitle</h2>
+            Lorem ipsum dolor.
+        </section>
+
+        <section class="slide">
+            <h1>Title</h1>
+            <h2>SubTitle</h2>
+            <ul>
+                <li>List item 1</li>
+                <li>List item 2</li>
+                <li>List item 3</li>
+                <li>List item 4</li>
+            </ul>
+        </section>
+
+        <section class="slide">
+            <h1>Title</h1>
+            <h2>SubTitle</h2>
+            <pre><code>
 {
     "name": "drupal/core",
     "description": "Drupal is an open source content management platform powering millions of websites and applications.",
@@ -116,26 +159,30 @@
     "license": "GPL-2.0-or-later"
 }
 					</code></pre>
-				</section>
-			</div>
-		</div>
+        </section>
+    </div>
+</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				history: true,
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+<script>
+  // More info about config & dependencies:
+  // - https://github.com/hakimel/reveal.js#configuration
+  // - https://github.com/hakimel/reveal.js#dependencies
+  Reveal.initialize({
+    history: true,
+    dependencies: [
+      {src: 'plugin/markdown/marked.js'},
+      {src: 'plugin/markdown/markdown.js'},
+      {src: 'plugin/notes/notes.js', async: true},
+      {
+        src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+          hljs.initHighlightingOnLoad();
+        }
+      }
+    ]
+  });
+</script>
+</body>
 </html>
