@@ -69,6 +69,7 @@
                     <li>Easier to test</li>
                     <li>IDE helps understand the code</li>
                 </ul>
+                <aside class="notes">Andreas</aside>
             </section>
             <section class="slide">
                 <h1>But old-school programming was so much easier…</h1>
@@ -93,24 +94,27 @@
                 <h2>Commerce 1.x to Commerce 2.x</h2>
             </section>
             <section class="slide">
-                <h1>How</h1>
-                <ul>
-                    <li>Migrate not upgrade.</li>
-                    <li>Nodes (product displays) -> products, products -> product variations.</li>
-                    <li>New entity attributes, no more taxonomies?</li>
-                    <li>No UI modules - installing Product provides entity type AND the interface</li>
-                    <li>No Rules (ANARCHY?)</li>
-                    <li>Price components vs adjustments</li>
-                    <li>No more hooks (or at least not that many) - we will cover that more in next section</li>
-                </ul>
-            </section>
-            <section class="slide">
                 <h1>Reasons</h1>
                 <ul>
-                    <li>Drupal 8 duh…</li>
-                    <li>Less contrib code</li>
-                    <li>Less custom code</li>
+                    <li class="fragment">Drupal 8, duh…</li>
+                    <li class="fragment"><code>!</code>Sunk cost</li>
+                    <li class="fragment">Less contrib code</li>
+                    <li class="fragment">Less custom code</li>
                 </ul>
+                <aside class="notes">Andreas</aside>
+            </section>
+            <section class="slide">
+                <h1>How</h1>
+                <ul>
+                    <li class="fragment">Migrate not upgrade.</li>
+                    <li class="fragment">Nodes -> products, products -> product variations.</li>
+                    <li class="fragment">New Attributes <span class="fragment">(no more taxonomies?)</span></li>
+                    <li class="fragment">No UI modules - installing Product provides entity type AND the interface</li>
+                    <li class="fragment">No Rules <span class="fragment">- ANARCHY?</span></li>
+                    <li class="fragment">Price components vs adjustments</li>
+                    <li class="fragment">No more hooks (or at least not that many) - we will cover that more in next section</li>
+                </ul>
+                <aside class="notes">Jakub</aside>
             </section>
         </section>
 
@@ -118,10 +122,11 @@
             <section class="slide">
                 <h1>Maintainability</h1>
                 <ul>
-                    <li>Backward compatibility (sometimes broken - find examples for payments and price formatter)</li>
-                    <li>SOLID - good architecture requires principles</li>
-                    <li>`composer update drupal/commerce --with-dependencies`</li>
+                    <li class="fragment">Backward compatibility (sometimes broken - find examples for payments and price formatter)</li>
+                    <li class="fragment">SOLID - good architecture requires principles</li>
+                    <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
                 </ul>
+                <aside class="notes">Andreas</aside>
             </section>
         </section>
 
