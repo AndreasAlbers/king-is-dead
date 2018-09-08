@@ -101,7 +101,26 @@
                 <aside class="notes">Andreas</aside>
             </section>
             <section class="slide">
-                <h1>How</h1>
+                <h1>Why?</h1>
+                <ul>
+                    <li class="fragment">Drupal 8, duh…</li>
+                    <li class="fragment">Maintainability
+                        <ul>
+                            <li class="fragment">Backward compatibility (sometimes broken - find examples for payments
+                                and price formatter)
+                            </li>
+                            <li class="fragment">SOLID - good architecture requires principles</li>
+                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
+                        </ul>
+                    </li>
+                    <li class="fragment"><code>!</code>Sunk cost</li>
+                    <li class="fragment">Less contrib code</li>
+                    <li class="fragment">Less custom code</li>
+                </ul>
+                <aside class="notes">MaintainabilityAndreas: ma semver (major/minor/patch versions)</aside>
+            </section>
+            <section class="slide">
+                <h1>How?</h1>
                 <ul>
                     <li class="fragment">Migrate not upgrade.</li>
                     <li class="fragment">Nodes -> products, products -> product variations.</li>
@@ -196,7 +215,7 @@
                 </ul>
             </section>
             <section>
-                <h2>Event subscribers -  special type of tagged services</h2>
+                <h2>Event subscribers - special type of tagged services</h2>
                 <ul>
                     <li>Dispatcher vs Subscriber</li>
                     <li>*.workflows.yml</li>
