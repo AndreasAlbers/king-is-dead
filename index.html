@@ -110,28 +110,21 @@ if (IsEqual::compare(10, 10)) {
             </section>
             <section class="slide">
                 <h2>/core/lib/Drupal/Core/CronInterface.php</h2>
-                <pre><code>
-<?php
-
-namespace Drupal\Core;
-
-/**
+                <pre><code>/**
  * An interface for running cron tasks.
  *
  * @see https://www.drupal.org/cron
  */
 interface CronInterface {
-
   /**
    * Executes a cron run.
    *
-   * Do not call this function from a test. Use $this->cronRun() instead.
+   * Do not call this function from a test. Use $this-&#x3E;cronRun() instead.
    *
    * @return bool
    *   TRUE upon success, FALSE otherwise.
    */
   public function run();
-
 }
                 </code></pre>
             </section>
@@ -141,7 +134,6 @@ interface CronInterface {
                     <li>Prettier</li>
                     <li>Easier to maintain - better separation and documentation</li>
                     <li class="fragment">Easier to test</li>
-                    <li class="fragment">IDE helps understand the code</li>
                 </ul>
                 <aside class="notes">Andreas</aside>
             </section>
@@ -178,6 +170,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);
             <section class="slide">
                 <h1>Then why Commerce 2.x is a complete rewrite?</h1>
                 <ul>
+                    <li class="fragment">To follow modernized/improved architecture of Drupal 8</li>
                     <li class="fragment">To leverage all the OOP goodness</li>
                     <li class="fragment">Make changes to the architecture</li>
                     <li class="fragment">Simplify codebase</li>
