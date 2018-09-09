@@ -56,30 +56,131 @@
             <section class="section">
                 <h1>Introduction</h1>
             </section>
+            <section class="quote">
+                <blockquote>Object-oriented programming is objectively better.</blockquote>
+                <small class="author">Gallus Anonymus</small>
+                <aside class="notes">Jakub: of course that's something we made up. But let's have a fun and elaborate a bit.</aside>
+            </section>
             <section class="slide">
-                <h1>OOP is objectively better.</h1>
+                <h1>Why OOP is objectively better?</h1>
                 <ul>
                     <li class="fragment">Prettier</li>
+                </ul>
+                <aside class="notes">Andreas: hard to argue with this^^ - Let's start with a joke to establish a good relationship with an audience.</aside>
+            </section>
+            <section class="slide">
+                <h1>⚒⚒⚒⚒⚒⚒⚒⚒⚒⚒</h1>
+                <pre><code>
+$x = 10;
+if ($x == 10) {
+    echo "I knew it!";
+}
+                </code></pre>
+                <aside class="notes">Andreas: Take this example - we compare two numbers and display a message if numbers are equal. Pretty boooooring, isn't it?</aside>
+            </section>
+            <section class="slide">
+                <h1>❤❤❤❤❤❤❤❤❤❤</h1>
+                <pre><code>
+class IsEqual implements ComparableInterface {
+    static public function compare(float $a, float $b): bool
+    {
+        try {
+            $test = 1/($a-$b);
+        }
+        catch (\DivisionByZeroError $exception) {
+            return true;
+        }
+        return false;
+    }
+}
+
+if (IsEqual::compare(10, 10)) {
+    echo "I knew it!";
+}
+                </code></pre>
+                <aside class="notes">Andreas: Now... much better - right? We have an interface, class, static member function, exception handling, we can mock it up, test...😍</aside>
+            </section>
+            <section class="slide">
+                <h1>Why OOP is objectively better?</h1>
+                <ul>
+                    <li>Prettier</li>
                     <li class="fragment">Easier to maintain - better separation and documentation</li>
+                </ul>
+                <aside class="notes">Andreas</aside>
+            </section>
+            <section class="slide">
+                <h2>/core/lib/Drupal/Core/CronInterface.php</h2>
+                <pre><code>
+<?php
+
+namespace Drupal\Core;
+
+/**
+ * An interface for running cron tasks.
+ *
+ * @see https://www.drupal.org/cron
+ */
+interface CronInterface {
+
+  /**
+   * Executes a cron run.
+   *
+   * Do not call this function from a test. Use $this->cronRun() instead.
+   *
+   * @return bool
+   *   TRUE upon success, FALSE otherwise.
+   */
+  public function run();
+
+}
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h1>Why OOP is objectively better?</h1>
+                <ul>
+                    <li>Prettier</li>
+                    <li>Easier to maintain - better separation and documentation</li>
                     <li class="fragment">Easier to test</li>
                     <li class="fragment">IDE helps understand the code</li>
                 </ul>
                 <aside class="notes">Andreas</aside>
             </section>
             <section class="slide">
-                <h1>But old-school programming was so much easier…</h1>
+                <h2>core/tests/Drupal/KernelTests/Core/Plugin/Condition/RequestPathTest.php</h2>
+                <pre><code>
+// Set a mock alias manager in the container.
+$this->aliasManager = new MockAliasManager();
+$this->container->set('path.alias_manager', $this->aliasManager);
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h1>Why OOP is objectively better?</h1>
                 <ul>
-                    <li>Yeah….</li>
-                    <li>Sure but so are one click setup options</li>
+                    <li>Prettier</li>
+                    <li>Easier to maintain - better separation and documentation</li>
+                    <li>Easier to test</li>
+                    <li class="fragment">IDE helps understand the code</li>
                 </ul>
                 <aside class="notes">Andreas</aside>
             </section>
             <section class="slide">
+                <h1>IDE helps understand the code</h1>
+                <img src="drupal-europe/img/ide-autocompletion-events.gif">
+            </section>
+            <section class="slide">
+                <h1>But old-school programming was so much easier…</h1>
+                <ul>
+                    <li>Yeah….</li>
+                    <li>...sure but so are one-click setup software or SaaS</li>
+                </ul>
+                <aside class="notes">Andreas: old-school programming === procedural code; easier because everything could go into .module file. But there are downsides - documentation, testability, performance, etc.</aside>
+            </section>
+            <section class="slide">
                 <h1>Then why Commerce 2.x is a complete rewrite?</h1>
                 <ul>
-                    <li>All the OOP goodness</li>
-                    <li>Changes to the architecture</li>
-                    <li>Simplification</li>
+                    <li class="fragment">To leverage all the OOP goodness</li>
+                    <li class="fragment">Make changes to the architecture</li>
+                    <li class="fragment">Simplify codebase</li>
                 </ul>
                 <aside class="notes">Andreas</aside>
             </section>
@@ -91,33 +192,22 @@
                 <h2>Commerce 1.x to Commerce 2.x</h2>
             </section>
             <section class="slide">
-                <h1>Reasons</h1>
-                <ul>
-                    <li class="fragment">Drupal 8, duh…</li>
-                    <li class="fragment"><code>!</code>Sunk cost</li>
-                    <li class="fragment">Less contrib code</li>
-                    <li class="fragment">Less custom code</li>
-                </ul>
-                <aside class="notes">Andreas</aside>
-            </section>
-            <section class="slide">
                 <h1>Why?</h1>
                 <ul>
                     <li class="fragment">Drupal 8, duh…</li>
-                    <li class="fragment">Maintainability
-                        <ul>
-                            <li class="fragment">Backward compatibility (sometimes broken - find examples for payments
-                                and price formatter)
-                            </li>
-                            <li class="fragment">SOLID - good architecture requires principles</li>
-                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
-                        </ul>
-                    </li>
                     <li class="fragment"><code>!</code>Sunk cost</li>
                     <li class="fragment">Less contrib code</li>
                     <li class="fragment">Less custom code</li>
+                    <li class="fragment">Maintainability
+                        <ul>
+                            <li class="fragment">Backward compatibility</li>
+                            <li class="fragment">Good architecture requires principles <br>(SOLID DRY KISS)</li>
+                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
+                        </ul>
+                    </li>
                 </ul>
-                <aside class="notes">MaintainabilityAndreas: ma semver (major/minor/patch versions)</aside>
+                <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - find examples for payments
+                    and price formatter</aside>
             </section>
             <section class="slide">
                 <h1>How?</h1>
@@ -127,19 +217,10 @@
                     <li class="fragment">New Attributes <span class="fragment">(no more taxonomies?)</span></li>
                     <li class="fragment">No UI modules - installing Product provides entity type AND the interface</li>
                     <li class="fragment">No Rules <span class="fragment">- ANARCHY?</span></li>
-                    <li class="fragment">Price components vs adjustments</li>
-                    <li class="fragment">No more hooks (or at least not that many) - we will cover that more in next section</li>
+                    <li class="fragment">Price components -> adjustments</li>
+                    <li class="fragment">No more hooks (or at least not that many)</li>
                 </ul>
-                <aside class="notes">Jakub</aside>
-            </section>
-            <section class="slide">
-                <h1>Maintainability</h1>
-                <ul>
-                    <li class="fragment">Backward compatibility (sometimes broken - find examples for payments and price formatter)</li>
-                    <li class="fragment">SOLID - good architecture requires principles</li>
-                    <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
-                </ul>
-                <aside class="notes">Andreas: semver (major/minor/patch versions)</aside>
+                <aside class="notes">Jakub: Outline of changes. More and detailed list to be found in the documentation. Andreas was talking about simplification - here's what he meant. Is Commerce 2.x more developer-oriented? Maybe...</aside>
             </section>
         </section>
 
