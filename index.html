@@ -70,18 +70,15 @@
             </section>
             <section class="slide">
                 <h1>⚒⚒⚒⚒⚒⚒⚒⚒⚒⚒</h1>
-                <pre><code>
-$x = 10;
+                <pre><code>$x = 10;
 if ($x == 10) {
     echo "I knew it!";
-}
-                </code></pre>
+}</code></pre>
                 <aside class="notes">Andreas: Take this example - we compare two numbers and display a message if numbers are equal. Pretty boooooring, isn't it?</aside>
             </section>
             <section class="slide">
                 <h1>❤❤❤❤❤❤❤❤❤❤</h1>
-                <pre><code>
-class IsEqual implements ComparableInterface {
+                <pre><code>class IsEqual implements ComparableInterface {
     static public function compare(float $a, float $b): bool
     {
         try {
@@ -94,10 +91,10 @@ class IsEqual implements ComparableInterface {
     }
 }
 
-if (IsEqual::compare(10, 10)) {
+$some->number->set(rand(0, 10));
+if (IsEqual::compare($some->number->value, 10)) {
     echo "I knew it!";
-}
-                </code></pre>
+}</code></pre>
                 <aside class="notes">Andreas: Now... much better - right? We have an interface, class, static member function, exception handling, we can mock it up, test...😍</aside>
             </section>
             <section class="slide">
@@ -106,7 +103,7 @@ if (IsEqual::compare(10, 10)) {
                     <li>Prettier</li>
                     <li class="fragment">Easier to maintain - better separation and documentation</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas: Separated code isn't just because it looks better also easier to maintain. 1 file 2000 lines vs 20 files of 100 lines (maybe a little more: see previus example)</aside>
             </section>
             <section class="slide">
                 <h2>/core/lib/Drupal/Core/CronInterface.php</h2>
@@ -125,8 +122,8 @@ interface CronInterface {
    *   TRUE upon success, FALSE otherwise.
    */
   public function run();
-}
-                </code></pre>
+}</code></pre>
+                <aside class="notes">Andreas: simple contextual documentation.</aside>
             </section>
             <section class="slide">
                 <h1>Why OOP is objectively better?</h1>
@@ -135,15 +132,13 @@ interface CronInterface {
                     <li>Easier to maintain - better separation and documentation</li>
                     <li class="fragment">Easier to test</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas: </aside>
             </section>
             <section class="slide">
                 <h2>core/tests/Drupal/KernelTests/Core/Plugin/Condition/RequestPathTest.php</h2>
-                <pre><code>
-// Set a mock alias manager in the container.
+                <pre><code>// Set a mock alias manager in the container.
 $this->aliasManager = new MockAliasManager();
-$this->container->set('path.alias_manager', $this->aliasManager);
-                </code></pre>
+$this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
             </section>
             <section class="slide">
                 <h1>Why OOP is objectively better?</h1>
@@ -162,10 +157,10 @@ $this->container->set('path.alias_manager', $this->aliasManager);
             <section class="slide">
                 <h1>But old-school programming was so much easier…</h1>
                 <ul>
-                    <li>Yeah….</li>
-                    <li>...sure but so are one-click setup software or SaaS</li>
+                    <li class="fragment">Yeah….</li>
+                    <li class="fragment">...sure but so are one-click setup software or SaaS</li>
                 </ul>
-                <aside class="notes">Andreas: old-school programming === procedural code; easier because everything could go into .module file. But there are downsides - documentation, testability, performance, etc.</aside>
+                <aside class="notes">Jakub: "Yeah..." Andreas: old-school programming === procedural code; easier because everything could go into .module file. But there are downsides - documentation, testability, performance, etc.</aside>
             </section>
             <section class="slide">
                 <h1>Then why Commerce 2.x is a complete rewrite?</h1>
@@ -175,7 +170,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);
                     <li class="fragment">Make changes to the architecture</li>
                     <li class="fragment">Simplify codebase</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas: summary of earlier slides and make it clear how basically all the code changed.</aside>
             </section>
         </section>
 
