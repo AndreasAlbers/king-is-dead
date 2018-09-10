@@ -182,7 +182,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
             <section class="slide">
                 <h1>Why?</h1>
                 <ul>
-                    <li class="fragment">Drupal 8, duh…</li>
+                    <li class="fragment">Drupal 8,<span class="fragment"> duh…</span></li>
                     <li class="fragment"><code>!</code>Sunk cost</li>
                     <li class="fragment">Less contrib code</li>
                     <li class="fragment">Less custom code</li>
@@ -190,7 +190,11 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                         <ul>
                             <li class="fragment">Backward compatibility</li>
                             <li class="fragment">Good architecture requires principles <br>(SOLID DRY KISS)</li>
-                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code></li>
+                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code>
+                                <ul>
+                                    <li class="fragment">Easy and reliable<span class="fragment">?</span></li>
+                                </ul>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -251,7 +255,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">hook_entitiy_CRUD</li>
                     <li class="fragment">hook_form_alter</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas remaining hooks do not originate in commerce but rather the api's commerce utilizes.</aside>
             </section>
             <section class="slide">
                 <h1>Plugins</h1>
@@ -264,7 +268,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">Checkout pane</li>
                     <li class="fragment">Conditions API</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas </aside>
             </section>
             <section class="slide">
                 <h1>Tagged services</h1>
