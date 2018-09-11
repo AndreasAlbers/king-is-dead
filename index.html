@@ -74,7 +74,7 @@
 if ($x == 10) {
     echo "I knew it!";
 }</code></pre>
-                <aside class="notes">Andreas: Take this example - we compare two numbers and display a message if numbers are equal. Pretty boooooring, isn't it?</aside>
+                <aside class="notes">Andreas: Take this example of some basic procedural code - we compare two numbers and display a message if numbers are equal. Pretty boooooring, isn't it?</aside>
             </section>
             <section class="slide">
                 <h1>❤❤❤❤❤❤❤❤❤❤</h1>
@@ -132,13 +132,14 @@ interface CronInterface {
                     <li>Easier to maintain - better separation and documentation</li>
                     <li class="fragment">Easier to test</li>
                 </ul>
-                <aside class="notes">Andreas: </aside>
+                <aside class="notes">Andreas: mocking of dependency injections to easyli test every line of code (hopefully)</aside>
             </section>
             <section class="slide">
                 <h2>core/tests/Drupal/KernelTests/Core/Plugin/Condition/RequestPathTest.php</h2>
                 <pre><code>// Set a mock alias manager in the container.
 $this->aliasManager = new MockAliasManager();
 $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
+                <aside class="notes">"Fake" objects with set values for testing with reliable result no matter the enviroment. Rely's hevily on dependency injection for mocked injections.</aside>
             </section>
             <section class="slide">
                 <h1>Why OOP is objectively better?</h1>
@@ -148,7 +149,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li>Easier to test</li>
                     <li class="fragment">IDE helps understand the code</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">Andreas: at least if you are using the right ide, with the right plugins.</aside>
             </section>
             <section class="slide">
                 <h1>IDE helps understand the code</h1>
@@ -170,7 +171,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">Make changes to the architecture</li>
                     <li class="fragment">Simplify codebase</li>
                 </ul>
-                <aside class="notes">Andreas: summary of earlier slides and make it clear how basically all the code changed.</aside>
+                <aside class="notes">Andreas: summary of earlier slides and make it clear how the whole code base changed.</aside>
             </section>
         </section>
 
@@ -199,7 +200,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     </li>
                 </ul>
                 <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - find examples for payments
-                    and price formatter</aside>
+                    and price formatter of when they broke in earlier version (2.7 or 2.8)</aside>
             </section>
             <section class="slide">
                 <h1>How?</h1>
@@ -260,15 +261,28 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
             <section class="slide">
                 <h1>Plugins</h1>
                 <ul>
-                    <li class="fragment">Payment gateways</li>
-                    <li class="fragment">Tax types</li>
-                    <li class="fragment">Payment method type</li>
-                    <li class="fragment">Payment type</li>
-                    <li class="fragment">Checkout flow</li>
-                    <li class="fragment">Checkout pane</li>
-                    <li class="fragment">Conditions API</li>
+                    <li class="fragment">Payment gateways
+                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentGateway/Manual.php
+                    </li>
+                    <li class="fragment">Tax types
+                        modules/contrib/commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php
+                    </li>
+                    <li class="fragment">Payment method type
+                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentMethodType/CreditCard.php
+                    </li>
+                    <li class="fragment">Payment type
+                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentType/PaymentManual.php
+                    </li>
+                    <li class="fragment">Checkout flow
+                        modules/contrib/commerce/modules/checkout/src/Plugin/Commerce/CheckoutFlow/CheckoutFlowBase.php
+                    </li>
+                    <li class="fragment">Checkout pane
+                        modules/contrib/commerce/modules/checkout/src/Plugin/Commerce/CheckoutPane/BillingInformation.php
+                    </li>
+                    <li class="fragment">Conditions API
+                        modules/contrib/commerce/modules/product/src/Plugin/Commerce/Condition/OrderProduct.php</li>
                 </ul>
-                <aside class="notes">Andreas </aside>
+                <aside class="notes">Andreas need to add demonstration of where they are should be simple enough. go over interface vs code.</aside>
             </section>
             <section class="slide">
                 <h1>Tagged services</h1>
