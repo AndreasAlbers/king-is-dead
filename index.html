@@ -187,20 +187,24 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment"><code>!</code>Sunk cost</li>
                     <li class="fragment">Less contrib code</li>
                     <li class="fragment">Less custom code</li>
-                    <li class="fragment">Maintainability
+                    <li class="fragment">Maintainability</li>
+                </ul>
+                <aside class="notes">Andreas: !sunk cost: you don't have to start developing a new shop in drupal 7 and commerce 2 wich might be deprecated. Less and less: you should be able to do most of your work within the main commerce modules.</aside>
+            </section>
+            <section class="slide">
+                <h1>Maintainability.</h1>
+                <ul>
+                    <li class="fragment">Backward compatibility</li>
+                    <li class="fragment">Good architecture requires principles <br>(SOLID DRY KISS)</li>
+                    <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code>
                         <ul>
-                            <li class="fragment">Backward compatibility</li>
-                            <li class="fragment">Good architecture requires principles <br>(SOLID DRY KISS)</li>
-                            <li class="fragment"><code>composer update drupal/commerce --with-dependencies</code>
-                                <ul>
-                                    <li class="fragment">Easy and reliable<span class="fragment">?</span></li>
-                                </ul>
-                            </li>
+                            <li class="fragment">Easy and reliable<span class="fragment">?</span></li>
+                            <li class="fragment">https://www.drupal.org/node/2981446</li>
+                            <li class="fragment">https://www.drupal.org/node/2982334</li>
                         </ul>
                     </li>
                 </ul>
-                <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - find examples for payments
-                    and price formatter of when they broke in earlier version (2.7 or 2.8)</aside>
+                <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - 2.8 why not 3.0</aside>
             </section>
             <section class="slide">
                 <h1>How?</h1>
@@ -261,28 +265,135 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
             <section class="slide">
                 <h1>Plugins</h1>
                 <ul>
-                    <li class="fragment">Payment gateways
-                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentGateway/Manual.php
-                    </li>
-                    <li class="fragment">Tax types
-                        modules/contrib/commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php
-                    </li>
-                    <li class="fragment">Payment method type
-                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentMethodType/CreditCard.php
-                    </li>
-                    <li class="fragment">Payment type
-                        modules/contrib/commerce/modules/payment/src/Plugin/Commerce/PaymentType/PaymentManual.php
-                    </li>
-                    <li class="fragment">Checkout flow
-                        modules/contrib/commerce/modules/checkout/src/Plugin/Commerce/CheckoutFlow/CheckoutFlowBase.php
-                    </li>
-                    <li class="fragment">Checkout pane
-                        modules/contrib/commerce/modules/checkout/src/Plugin/Commerce/CheckoutPane/BillingInformation.php
-                    </li>
-                    <li class="fragment">Conditions API
-                        modules/contrib/commerce/modules/product/src/Plugin/Commerce/Condition/OrderProduct.php</li>
+                    <li class="fragment">Payment gateways</li>
                 </ul>
-                <aside class="notes">Andreas need to add demonstration of where they are should be simple enough. go over interface vs code.</aside>
+                <aside class="notes">Andreas</aside>
+            </section>
+            <section class="slide">
+                <h2>commerce/modules/payment/src/Plugin/Commerce/PaymentGateway/Manual.php</h2>
+                <pre><code>public function buildPaymentOperations(PaymentInterface $payment) {
+  $payment_state = $payment->getState()->value;
+  $operations = [];
+  $operations['receive'] = [
+    'title' => $this->t('Receive'),
+    'page_title' => $this->t('Receive payment'),
+    'plugin_form' => 'receive-payment',
+    'access' => $payment_state == 'pending',
+  ];
+  $operations['void'] = [
+    'title' => $this->t('Void'),
+    'page_title' => $this->t('Void payment'),
+    'plugin_form' => 'void-payment',
+    'access' => $payment_state == 'pending',
+  ];
+  $operations['refund'] = [
+    'title' => $this->t('Refund'),
+    'page_title' => $this->t('Refund payment'),
+    'plugin_form' => 'refund-payment',
+    'access' => in_array($payment_state, ['completed', 'partially_refunded']),
+  ];
+
+  return $operations;
+}</code></pre>
+                <aside class="notes">Andreas States receive payment, void both on pending. refund on either completed or part refund.</aside>
+            </section>
+            <section class="slide">
+                <h1>Plugins</h1>
+                <ul>
+                    <li>Payment gateways</li>
+                    <li class="fragment">Tax types<ul>
+                        <li class="fragment">commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php</li>
+                    </ul></li>
+                    <li class="fragment">Payment method type</li>
+                    <!--<li class="fragment">Payment type<ul>-->
+                        <!--<li class="fragment">commerce/modules/payment/src/Plugin/Commerce/PaymentType/PaymentManual.php</li>-->
+                    <!--</ul></li>-->
+                    <li class="fragment">Checkout flow</li>
+                </ul>
+                <aside class="notes">Andreas: Tax, long file with all the aplicable taxes for the eu.
+                payment method type: like credit card or paypal, if yours doesn't exist you can make your own.
+                </aside>
+            </section>
+            <section class="slide">
+                <h2>commerce/modules/checkout/src/Plugin/Commerce/CheckoutFlow/CheckoutFlowBase.php</h2>
+                <pre><code>/**
+ * Provides the default multistep checkout flow.
+ *
+ * @CommerceCheckoutFlow(
+ *   id = "multistep_default",
+ *   label = "Multistep - Default",
+ * )
+ */
+class MultistepDefault extends CheckoutFlowWithPanesBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSteps() {
+    // Note that previous_label and next_label are not the labels
+    // shown on the step itself. Instead, they are the labels shown
+    // when going back to the step, or proceeding to the step.
+    return [
+      'login' => [
+        'label' => $this->t('Login'),
+        'previous_label' => $this->t('Go back'),
+        'has_sidebar' => FALSE,
+      ],
+      'order_information' => [
+        'label' => $this->t('Order information'),
+        'has_sidebar' => TRUE,
+        'previous_label' => $this->t('Go back'),
+      ],
+      'review' => [
+        'label' => $this->t('Review'),
+        'next_label' => $this->t('Continue to review'),
+        'previous_label' => $this->t('Go back'),
+        'has_sidebar' => TRUE,
+      ],
+    ] + parent::getSteps();
+  }
+
+}</code></pre>
+                <aside class="notes">Andreas define steps in checkout</aside>
+            </section>
+            <section class="slide">
+                <h1>Plugins</h1>
+                <ul>
+                    <li>Payment gateways</li>
+                    <li>Tax types<ul>
+                        <li>commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php</li>
+                    </ul></li>
+                    <li>Payment method type</li>
+                    <!--<li>Payment type</li>-->
+                    <li>Checkout flow</li>
+                    <li class="fragment">Checkout pane<ul>
+                        <li class="fragment">commerce/modules/checkout/src/Plugin/Commerce/CheckoutPane/BillingInformation.php</li>
+                    </ul></li>
+                    <li class="fragment">Conditions API</li>
+                </ul>
+                <aside class="notes">Andreas panes one for each pane in the checkout flow, billing info, shipping info, payment info, login, etc. need one not provided by commerce or commerce contrib make your own, you have access to all the stuff put there by the earlier panes and when your done send it to the next one.</aside>
+            </section>
+            <section class="slide">
+                <h2>commerce/modules/product/src/Plugin/Commerce/Condition/OrderProduct.php</h2>
+                <pre><code>public function evaluate(EntityInterface $entity) {
+  $this->assertEntity($entity);
+  /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
+  $order = $entity;
+  $product_ids = $this->getProductIds();
+  foreach ($order->getItems() as $order_item) {
+    /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $purchased_entity */
+    $purchased_entity = $order_item->getPurchasedEntity();
+    if (!$purchased_entity || $purchased_entity->getEntityTypeId() != 'commerce_product_variation') {
+      continue;
+    }
+    if (in_array($purchased_entity->getProductId(), $product_ids)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+  }</code></pre>
+                <aside class="notes">Andreas: this is a demonstration of where and how they look. Clarify you use this in the interface but you can make your own.</aside>
             </section>
             <section class="slide">
                 <h1>Tagged services</h1>
@@ -311,7 +422,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">CartEvents, OrderEvents, etc.</li>
                     <li class="fragment">Symfony\Component\EventDispatcher\Event</li>
                 </ul>
-                <aside class="notes">Andreas workflow transitions are availlable as Events n- check in commerce docs</aside>
+                <aside class="notes">Andreas cart(transition product into cart) order(transition to payment pending->confirmed->refunded) workflow transitions are availlable as Events n- check in commerce docs</aside>
             </section>
         </section>
 
