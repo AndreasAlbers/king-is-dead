@@ -646,10 +646,10 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     Andreas:
                     There is no central place where documentation about dispatched events names. Best to look for files
                     ending with *Events.php suffix. Example CartEvents or OrderEvents.
-                    entity state transitions are available as Events
-                    two examples are order or payment
+                    entity state transitions are also available as Events but you won't find *Events class which
+                    describes these types of events. Two examples are order or payment transitions.
                     order example - when status changes to from draft to completed - "place" transition is triggered.
-                    </aside>
+                </aside>
             </section>
             <section class="slide">
                 <h2>commerce_order.workflows.yml</h2>
@@ -689,9 +689,28 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                 </ul>
                 <aside class="notes">
                     Andreas:
-                    order or payment - transition to payment new->completed->refunded
+                    All event subscribers must implement EventSubscriberInterface. Type of the object passed to callback
+                    function is hard guess. Use generic Event type
+                </aside>
+            </section>
+            <section class="slide">
+                <h2>web/modules/contrib/commerce/modules/order/src/EventSubscriber/OrderNumberSubscriber.php</h2>
+                <pre><code data-trim data-noescape>
+                    class OrderNumberSubscriber implements EventSubscriberInterface {
 
-                    workflow transitions are availlable as Events n- check in commerce docs
+                      public static function getSubscribedEvents() {
+                        $events = [
+                          'commerce_order.place.pre_transition' => ['setOrderNumber', -30],
+                        ];
+                        return $events;
+                      }
+
+                      public function setOrderNumber(<span class="fragment highlight-red">Event $event</span>) {
+                      }
+                </code></pre>
+                <aside class="notes">
+                    If you don't know what type is passed to the callback - use generic Event type and figure out (dpm,
+                    kint, xdebug) what is the actual type.
                 </aside>
             </section>
 
