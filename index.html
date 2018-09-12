@@ -279,140 +279,155 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                 </ul>
                 <aside class="notes">
                     Andreas:
-                    remaining hooks do not originate in commerce but rather the api's commerce utilizes.
+                    remaining hooks do not necessarily originate in commerce but most of the hook you still may wanna use
+                    are coming from Drupal Core's Entity API and Form API.
                 </aside>
             </section>
             <section class="slide">
                 <h1>Plugins</h1>
                 <ul>
-                    <li class="fragment">Payment gateways</li>
+                    <li class="fragment">Payment gateways - @CommercePaymentGateway</li>
                 </ul>
-                <aside class="notes">Andreas</aside>
+                <aside class="notes">
+                    Andreas:
+                    What defines plugins - location in the file structure and the annontation. Let's look at the example.
+                    Interfaces defines payment gateways capabilities.
+                </aside>
             </section>
             <section class="slide">
                 <h2>commerce/modules/payment/src/Plugin/Commerce/PaymentGateway/Manual.php</h2>
-                <pre><code>public function buildPaymentOperations(PaymentInterface $payment) {
-  $payment_state = $payment->getState()->value;
-  $operations = [];
-  $operations['receive'] = [
-    'title' => $this->t('Receive'),
-    'page_title' => $this->t('Receive payment'),
-    'plugin_form' => 'receive-payment',
-    'access' => $payment_state == 'pending',
-  ];
-  $operations['void'] = [
-    'title' => $this->t('Void'),
-    'page_title' => $this->t('Void payment'),
-    'plugin_form' => 'void-payment',
-    'access' => $payment_state == 'pending',
-  ];
-  $operations['refund'] = [
-    'title' => $this->t('Refund'),
-    'page_title' => $this->t('Refund payment'),
-    'plugin_form' => 'refund-payment',
-    'access' => in_array($payment_state, ['completed', 'partially_refunded']),
-  ];
-
-  return $operations;
-}</code></pre>
-                <aside class="notes">Andreas States receive payment, void both on pending. refund on either completed or part refund.</aside>
+                <pre><code data-trim data-noescape>
+                    namespace Drupal\commerce_payment\Plugin\Commerce\PaymentGateway;
+                    ...
+                    /**
+                     * Provides the Manual payment gateway.
+                     *
+                     * @CommercePaymentGateway(
+                     *   id = "manual",
+                     *   label = "Manual",
+                     *   display_label = "Manual",
+                     *   modes = {
+                     *     "n/a" = @Translation("N/A"),
+                     *   },
+                     *   forms = {
+                     *     "add-payment" = "Drupal\commerce_payment\PluginForm\ManualPaymentAddForm",
+                     *     "receive-payment" = "Drupal\commerce_payment\PluginForm\PaymentReceiveForm",
+                     *   },
+                     *   payment_type = "payment_manual",
+                     * )
+                     */
+                    class Manual extends PaymentGatewayBase implements ManualPaymentGatewayInterface {
+                    ...
+                </code></pre>
+                <aside class="notes">
+                    Mind @CommercePaymentGateway that's a plugin type name. @CommercePaymentGateway {} is an annotated plugin.
+                    Both annotation and file's location are important - otherwise you won't get your plugin discovered.
+                </aside>
             </section>
             <section class="slide">
                 <h1>Plugins</h1>
                 <ul>
                     <li>Payment gateways</li>
-                    <li class="fragment">Tax types<ul>
-                        <li class="fragment">commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php</li>
+                    <li class="fragment">Tax types - @CommerceTaxType<ul>
+                        <li class="fragment">EuropeanUnionVat</li>
+                        <li class="fragment">NorwegianVat</li>
+                        <li class="fragment">SwissVat</li>
+                        <li class="fragment">etc.</li>
                     </ul></li>
-                    <li class="fragment">Payment method type</li>
-                    <!--<li class="fragment">Payment type<ul>-->
-                        <!--<li class="fragment">commerce/modules/payment/src/Plugin/Commerce/PaymentType/PaymentManual.php</li>-->
-                    <!--</ul></li>-->
-                    <li class="fragment">Checkout flow</li>
+                    <li class="fragment">Payment method type - @CommercePaymentMethodType</li>
+                    <ul>
+                        <li class="fragment">CreditCard</li>
+                        <li class="fragment">Paypal</li>
+                    </ul>
+                    <li class="fragment">Checkout flow - @CommerceCheckoutFlow</li>
                 </ul>
-                <aside class="notes">Andreas: Tax, long file with all the aplicable taxes for the eu.
-                payment method type: like credit card or paypal, if yours doesn't exist you can make your own.
+                <aside class="notes">
+                    Andreas:
+                    Tax, long file with all the applicable taxes for the eu. - as a european user probably no need to
+                    create your own.
+                    Payment method type: like credit card or paypal, if yours doesn't exist you can make your own -
+                    there's hardly a case when you actually need to do that.
                 </aside>
             </section>
             <section class="slide">
                 <h2>commerce/modules/checkout/src/Plugin/Commerce/CheckoutFlow/CheckoutFlowBase.php</h2>
-                <pre><code>/**
- * Provides the default multistep checkout flow.
- *
- * @CommerceCheckoutFlow(
- *   id = "multistep_default",
- *   label = "Multistep - Default",
- * )
- */
-class MultistepDefault extends CheckoutFlowWithPanesBase {
+                <pre><code data-trim data-noescape>
+                    namespace Drupal\commerce_checkout\Plugin\Commerce\CheckoutFlow;
+                    ...
+                    /**
+                     * Provides the default multistep checkout flow.
+                     *
+                     * @CommerceCheckoutFlow(
+                     *   id = "multistep_default",
+                     *   label = "Multistep - Default",
+                     * )
+                     */
+                    class MultistepDefault extends CheckoutFlowWithPanesBase {
+                    ...
+                    public function getSteps() {
+                        return [
+                            ...
+                        ];
+                    }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getSteps() {
-    // Note that previous_label and next_label are not the labels
-    // shown on the step itself. Instead, they are the labels shown
-    // when going back to the step, or proceeding to the step.
-    return [
-      'login' => [
-        'label' => $this->t('Login'),
-        'previous_label' => $this->t('Go back'),
-        'has_sidebar' => FALSE,
-      ],
-      'order_information' => [
-        'label' => $this->t('Order information'),
-        'has_sidebar' => TRUE,
-        'previous_label' => $this->t('Go back'),
-      ],
-      'review' => [
-        'label' => $this->t('Review'),
-        'next_label' => $this->t('Continue to review'),
-        'previous_label' => $this->t('Go back'),
-        'has_sidebar' => TRUE,
-      ],
-    ] + parent::getSteps();
-  }
-
-}</code></pre>
-                <aside class="notes">Andreas define steps in checkout</aside>
+                </code></pre>
+                <aside class="notes">
+                    Andreas: This plugin type defines checkout flow. Each flow can have one or more steps. Steps are defined
+                    by getSteps() method. One Commerce website can define one or more checkout flows.
+                </aside>
             </section>
             <section class="slide">
                 <h1>Plugins</h1>
                 <ul>
                     <li>Payment gateways</li>
-                    <li>Tax types<ul>
-                        <li>commerce/modules/tax/src/Plugin/Commerce/TaxType/EuropeanUnionVat.php</li>
-                    </ul></li>
+                    <li>Tax types</li>
                     <li>Payment method type</li>
-                    <!--<li>Payment type</li>-->
                     <li>Checkout flow</li>
-                    <li class="fragment">Checkout pane<ul>
-                        <li class="fragment">commerce/modules/checkout/src/Plugin/Commerce/CheckoutPane/BillingInformation.php</li>
-                    </ul></li>
-                    <li class="fragment">Conditions API</li>
+                    <li class="fragment">Checkout pane - @CommerceCheckoutPane</li>
+                    <li class="fragment">Conditions API - @CommerceCondition</li>
                 </ul>
                 <aside class="notes">Andreas panes one for each pane in the checkout flow, billing info, shipping info, payment info, login, etc. need one not provided by commerce or commerce contrib make your own, you have access to all the stuff put there by the earlier panes and when your done send it to the next one.</aside>
             </section>
             <section class="slide">
+                <img src="drupal-europe/img/conditions.png" class="no-frame">
+            </section>
+            <section class="slide">
                 <h2>commerce/modules/product/src/Plugin/Commerce/Condition/OrderProduct.php</h2>
-                <pre><code>public function evaluate(EntityInterface $entity) {
-  $this->assertEntity($entity);
-  /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
-  $order = $entity;
-  $product_ids = $this->getProductIds();
-  foreach ($order->getItems() as $order_item) {
-    /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $purchased_entity */
-    $purchased_entity = $order_item->getPurchasedEntity();
-    if (!$purchased_entity || $purchased_entity->getEntityTypeId() != 'commerce_product_variation') {
-      continue;
-    }
-    if (in_array($purchased_entity->getProductId(), $product_ids)) {
-      return TRUE;
-    }
-  }
+                <pre><code data-trim data-noescape>
+                    namespace Drupal\commerce_product\Plugin\Commerce\Condition;
 
-  return FALSE;
-  }</code></pre>
+                    /**
+                     * Provides the product condition for orders.
+                     *
+                     * @CommerceCondition(
+                     *   id = "order_product",
+                     *   label = @Translation("Product"),
+                     *   display_label = @Translation("Order contains specific products"),
+                     *   category = @Translation("Products"),
+                     *   entity_type = "commerce_order",
+                     *   weight = -1,
+                     * )
+                     */
+                    class OrderProduct extends ConditionBase implements ContainerFactoryPluginInterface {
+                        public function evaluate(EntityInterface $entity) {
+                          $this->assertEntity($entity);
+                          /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
+                          $order = $entity;
+                          $product_ids = $this->getProductIds();
+                          foreach ($order->getItems() as $order_item) {
+                            /** @var \Drupal\commerce_product\Entity\ProductVariationInterface $purchased_entity */
+                            $purchased_entity = $order_item->getPurchasedEntity();
+                            if (!$purchased_entity || $purchased_entity->getEntityTypeId() != 'commerce_product_variation') {
+                              continue;
+                            }
+                            if (in_array($purchased_entity->getProductId(), $product_ids)) {
+                              return TRUE;
+                            }
+                          }
+
+                          return FALSE;
+                        }
+                </code></pre>
                 <aside class="notes">Andreas: this is a demonstration of where and how they look. Clarify you use this in the interface but you can make your own.</aside>
             </section>
             <section class="slide">
@@ -421,20 +436,18 @@ class MultistepDefault extends CheckoutFlowWithPanesBase {
                     <li class="fragment">Resolvers
                         <ul>
                             <li class="fragment">Country resolver</li>
-                            <li class="fragment">Locale resolver</li>
-                            <li class="fragment">Tax rate resolver</li>
-                            <li class="fragment">Order type resolver</li>
-                            <li class="fragment">Price resolver</li>
-                            <li class="fragment">Store resolver</li>
-                            <li class="fragment">Checkout flow resolver</li>
                         </ul>
                     </li>
-                    <li class="fragment">Order processor</li>
-                    <li class="fragment">Availability Manager</li>
                 </ul>
-                <aside class="notes">Jakub</aside>
+                <aside class="notes">
+                    Jakub:
+                    There are 3 main groups of tagged services you as a developer may wanna use.
+                    First one - resolvers.
+                    Resolvers, usually, defines chainable services that can resolve values for some properties.
+                    Take country resolver as an example...
+                </aside>
             </section>
-            <section class="fragment">
+            <section class="slide">
                 <h2>commerce.services.yml</h2>
                 <pre><code data-trim data-noescape>
                     commerce.chain_country_resolver:
@@ -448,17 +461,240 @@ class MultistepDefault extends CheckoutFlowWithPanesBase {
                         tags:
                           - { name: commerce.country_resolver, priority: -100 }
                 </code></pre>
+                <aside class="notes">
+                    Chains defines tags. Default one provided for each chain.
+                </aside>
+            </section>
+            <section class="slide">
+                <h1>Tagged services</h1>
+                <ul>
+                    <li>Resolvers
+                        <ul>
+                            <li>Country resolver</li>
+                            <li class="fragment">Locale resolver</li>
+                            <li class="fragment">Tax rate resolver</li>
+                            <li class="fragment">Order type resolver</li>
+                            <li class="fragment">Price resolver</li>
+                            <li class="fragment">Store resolver</li>
+                            <li class="fragment">Checkout flow resolver</li>
+                        </ul>
+                    </li>
+                </ul>
+                <aside class="notes">Jakub</aside>
+            </section>
+            <section class="slide">
+                <h1>Tagged services</h1>
+                <ul>
+                    <li>Resolvers</li>
+                    <li class="fragment">Order processor</li>
+                </ul>
+                <aside class="notes">Jakub</aside>
+            </section>
+            <section class="slide">
+                <h2></h2>
+                <pre><code data-trim data-noescape>
+                    /**
+                     * Defines an interface for order processors.
+                     *
+                     * Order processors modify/handle/rebuild orders during the refresh process.
+                     */
+                    interface OrderProcessorInterface {
+
+                      /**
+                       * Processes an order.
+                       *
+                       * @param \Drupal\commerce_order\Entity\OrderInterface $order
+                       *   The order.
+                       */
+                      public function process(OrderInterface $order);
+
+                    }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h2></h2>
+                <pre><code data-trim data-noescape>
+                  commerce_promotion.promotion_order_processor:
+                    class: Drupal\commerce_promotion\PromotionOrderProcessor
+                    arguments: ['@entity_type.manager']
+                    tags:
+                      - { name: commerce_order.order_processor, priority: 100, adjustment_type: promotion }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h2></h2>
+                <pre><code data-trim data-noescape>
+                    namespace Drupal\commerce_promotion;
+
+                    /**
+                     * Applies promotions to orders during the order refresh process.
+                     *
+                     * @see \Drupal\commerce_promotion\CouponOrderProcessor
+                     */
+                    class PromotionOrderProcessor implements OrderProcessorInterface {
+                      public function process(OrderInterface $order) {
+                      ...
+                      }
+                    }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h1>Tagged services</h1>
+                <ul>
+                    <li>Resolvers</li>
+                    <li>Order processor</li>
+                    <li class="fragment">Availability Manager</li>
+                </ul>
+                <aside class="notes">Jakub</aside>
+            </section>
+            <section class="slide">
+                <h2></h2>
+                <pre><code data-trim data-noescape>
+                  public function check(PurchasableEntityInterface $entity, $quantity, Context $context) {
+                    foreach ($this->checkers as $checker) {
+                      if ($checker->applies($entity)) {
+                        $result = $checker->check($entity, $quantity, $context);
+                        if ($result === FALSE) {
+                          return FALSE;
+                        }
+                      }
+                    }
+
+                    return TRUE;
+                  }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h2></h2>
+                <pre><code data-trim data-noescape>
+                    commerce_test.test_availability_checker:
+                        class: Drupal\commerce_test\TestAvailabilityChecker
+                        tags:
+                          - { name: commerce.availability_checker }
+                </code></pre>
             </section>
             <section class="slide">
                 <h1>Event subscribers - special type of tagged services</h1>
+                <pre><code data-trim data-noescape>
+                      commerce_order.order_number_subscriber:
+                        class: Drupal\commerce_order\EventSubscriber\OrderNumberSubscriber
+                        tags:
+                          - { name: event_subscriber }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h1>Event subscribers</h1>
                 <ul>
                     <li class="fragment">Dispatcher vs Subscriber</li>
-                    <li class="fragment">*.workflows.yml</li>
+                </ul>
+                <aside class="notes">
+                    There are dispatcher dispatches and subsriber subscribes.
+                    Names of events are defined by the string.
+                </aside>
+            </section>
+            <section class="slide">
+                <h1>Event subscribers</h1>
+                <h2>Dispatcher vs subscriber</h2>
+                <pre><code data-trim data-noescape>
+                  $event = new CartEntityAddEvent(
+                    $cart,
+                    $purchased_entity,
+                    $quantity,
+                    $saved_order_item
+                  );
+                  $this->eventDispatcher->dispatch(
+                    <span class="fragment highlight-red">CartEvents::CART_ENTITY_ADD,</span>
+                    $event
+                  );
+                </code></pre>
+                <aside class="notes">
+                    Andreas:
+                    This is dispatcher.
+                </aside>
+            </section>
+            <section class="slide">
+                <h1>Event subscribers</h1>
+                <h2>Dispatcher vs subscriber</h2>
+                <pre><code data-trim data-noescape>
+                    class CartEventSubscriber implements EventSubscriberInterface {
+
+                      /**
+                       * {@inheritdoc}
+                       */
+                      public static function getSubscribedEvents() {
+                        $events = [
+                          <span class="fragment highlight-red">CartEvents::CART_ENTITY_ADD</span> => 'displayAddToCartMessage',
+                        ];
+                        return $events;
+                      }
+
+                      public function displayAddToCartMessage(CartEntityAddEvent $event) {}
+                </code></pre>
+                <aside class="notes">
+                    Andreas:
+                    This is subscriber.
+                </aside>
+            </section>
+            <section class="slide">
+                <h1>Event subscribers</h1>
+                <ul>
+                    <li>Dispatcher vs Subscriber</li>
                     <li class="fragment">CartEvents, OrderEvents, etc.</li>
+                    <li class="fragment">*.workflows.yml</li>
+                </ul>
+                <aside class="notes">
+                    Andreas:
+                    There is no central place where documentation about dispatched events names. Best to look for files
+                    ending with *Events.php suffix. Example CartEvents or OrderEvents.
+                    entity state transitions are available as Events
+                    two examples are order or payment
+                    order example - when status changes to from draft to completed - "place" transition is triggered.
+                    </aside>
+            </section>
+            <section class="slide">
+                <h2>commerce_order.workflows.yml</h2>
+                <pre><code data-trim data-noescape>
+                    order_default:
+                      ...
+                      transitions:
+                        place: <span class="fragment"><- Look here</span>
+                          label: 'Place order'
+                          from: [draft]
+                          to: completed
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h2>web/modules/contrib/commerce/modules/order/src/EventSubscriber/OrderNumberSubscriber.php</h2>
+                <pre><code data-trim data-noescape>
+                    class OrderNumberSubscriber implements EventSubscriberInterface {
+
+                      /**
+                       * {@inheritdoc}
+                       */
+                      public static function getSubscribedEvents() {
+                        $events = [
+                          'commerce_order.place.pre_transition' => ['setOrderNumber', -30],
+                        ];
+                        return $events;
+                      }
+                </code></pre>
+            </section>
+            <section class="slide">
+                <h1>Event subscribers</h1>
+                <ul>
+                    <li>Dispatcher vs Subscriber</li>
+                    <li>CartEvents, OrderEvents, etc.</li>
+                    <li>*.workflows.yml</li>
                     <li class="fragment">Symfony\Component\EventDispatcher\Event</li>
                 </ul>
-                <aside class="notes">Andreas cart(transition product into cart) order(transition to payment pending->confirmed->refunded) workflow transitions are availlable as Events n- check in commerce docs</aside>
+                <aside class="notes">
+                    Andreas:
+                    order or payment - transition to payment new->completed->refunded
+
+                    workflow transitions are availlable as Events n- check in commerce docs
+                </aside>
             </section>
+
         </section>
 
         <section class="slide">
