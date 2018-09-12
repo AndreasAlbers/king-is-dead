@@ -200,11 +200,12 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                         <ul>
                             <li class="fragment">Easy and reliable<span class="fragment">?</span></li>
                             <li class="fragment">https://www.drupal.org/node/2981446</li>
+                            <li class="fragment">https://www.drupal.org/node/2975672</li>
                             <li class="fragment">https://www.drupal.org/node/2982334</li>
                         </ul>
                     </li>
                 </ul>
-                <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - 2.8 why not 3.0</aside>
+                <aside class="notes">Andreas: ma semver (major/minor/patch versions); sometimes broken - 2.7, 2.8 why not 3.0, 4.0</aside>
             </section>
             <section class="slide">
                 <h1>How?</h1>
@@ -217,7 +218,11 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">Price components -> adjustments</li>
                     <li class="fragment">No more hooks (or at least not that many)</li>
                 </ul>
-                <aside class="notes">Jakub: Outline of changes. More and detailed list to be found in the documentation. Andreas was talking about simplification - here's what he meant. Is Commerce 2.x more developer-oriented? Maybe...</aside>
+                <aside class="notes">
+                    Jakub: Outline of changes. More and detailed list to be found in the documentation.
+                    Andreas was talking about simplification - here's what he meant.
+                    Is Commerce 2.x more developer-oriented? Maybe...
+                </aside>
             </section>
         </section>
 
@@ -236,17 +241,29 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">hook_commerce_cart_order_refresh</li>
                     <li class="fragment">hook_commerce_cart_product_comparison_properties_alter</li>
                 </ul>
-                <aside class="notes">Jakub</aside>
+                <aside class="notes">
+                    Jakub:
+                    There was so many different things you could/must do with hooks in the past. Like payment methods
+                    were a hook + collection of callbacks. I don't think I ever did a project which would not implement
+                    one of these hooks.
+                </aside>
             </section>
             <section class="slide">
                 <h1>Rules</h1>
                 <ul>
-                    <li class="fragment">Event subscribers</li>
-                    <li class="fragment">Resolvers</li>
-                    <li class="fragment">Condition API</li>
-                    <li class="fragment">Transitions</li>
+                    <li class="fragment">Resolve price</li>
+                    <li class="fragment">Create line item</li>
+                    <li class="fragment">Available payment/shipping methods</li>
+                    <li class="fragment">Discounts</li>
                 </ul>
-                <aside class="notes">Jakub</aside>
+                <aside class="notes">
+                    Jakub:
+                    People love Rules, people hate rules - define yourself in one of the group but you probably still
+                    have been using it. Commerce 1.x was Rules oriented - price resolving, shipping/payment method resolving
+                    discounts resolving but also reaction api was organized around Rules.
+                    In D7 some developers complained a lot that they cannot do things in code but must use UI.
+                    In D8 site builders complain they cannot do things in UI but they must code.
+                </aside>
             </section>
         </section>
 
@@ -260,7 +277,10 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">hook_entitiy_CRUD</li>
                     <li class="fragment">hook_form_alter</li>
                 </ul>
-                <aside class="notes">Andreas remaining hooks do not originate in commerce but rather the api's commerce utilizes.</aside>
+                <aside class="notes">
+                    Andreas:
+                    remaining hooks do not originate in commerce but rather the api's commerce utilizes.
+                </aside>
             </section>
             <section class="slide">
                 <h1>Plugins</h1>
@@ -413,6 +433,21 @@ class MultistepDefault extends CheckoutFlowWithPanesBase {
                     <li class="fragment">Availability Manager</li>
                 </ul>
                 <aside class="notes">Jakub</aside>
+            </section>
+            <section class="fragment">
+                <h2>commerce.services.yml</h2>
+                <pre><code data-trim data-noescape>
+                    commerce.chain_country_resolver:
+                        class: Drupal\commerce\Resolver\ChainCountryResolver
+                        tags:
+                          - { name: service_collector, call: addResolver, tag: commerce.country_resolver }
+
+                      commerce.default_country_resolver:
+                        class: Drupal\commerce\Resolver\DefaultCountryResolver
+                        arguments: ['@config.factory']
+                        tags:
+                          - { name: commerce.country_resolver, priority: -100 }
+                </code></pre>
             </section>
             <section class="slide">
                 <h1>Event subscribers - special type of tagged services</h1>
