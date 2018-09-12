@@ -390,6 +390,10 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
             </section>
             <section class="slide">
                 <img src="drupal-europe/img/conditions.png" class="no-frame">
+                <aside class="notes">
+                    Andreas
+                    Set up conditions in the interface on promotions/discount.
+                </aside>
             </section>
             <section class="slide">
                 <h2>commerce/modules/product/src/Plugin/Commerce/Condition/OrderProduct.php</h2>
@@ -588,7 +592,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                     <li class="fragment">Dispatcher vs Subscriber</li>
                 </ul>
                 <aside class="notes">
-                    There are dispatcher dispatches and subsriber subscribes.
+                    Andreas: There are dispatcher dispatches and subsriber subscribes.
                     Names of events are defined by the string.
                 </aside>
             </section>
@@ -662,6 +666,8 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                           from: [draft]
                           to: completed
                 </code></pre>
+                <aside class="notes">Andreas: in the state machine module, the workflow.yml is the base for the names of dispatched events.
+                    Highlight: place is the name, as in place order.</aside>
             </section>
             <section class="slide">
                 <h2>web/modules/contrib/commerce/modules/order/src/EventSubscriber/OrderNumberSubscriber.php</h2>
@@ -678,6 +684,7 @@ $this->container->set('path.alias_manager', $this->aliasManager);</code></pre>
                         return $events;
                       }
                 </code></pre>
+                <aside class="notes">place is the same as transition name.</aside>
             </section>
             <section class="slide">
                 <h1>Event subscribers</h1>
